@@ -22,6 +22,8 @@ const editTaskPriority = document.getElementById("editTaskPriority");
 const saveEditBtn = document.getElementById("saveEditBtn");
 let currentEditId = null;
 let currentFilter = 'all';
+let currentImportant = 'low';
+
 let tasks = [];
 
 // Fetch tasks from server
@@ -60,10 +62,19 @@ function renderTasks() {
 
     tasks
         .filter(t => {
-            if (currentFilter === 'pending') return !t.isCompleted;
-            if (currentFilter === 'completed') return t.isCompleted;
-            return true; // show all todos
+            // filter by task 
+            const statusMatch = (currentFilter === 'all') ||
+                (currentFilter === 'pending' && !t.isCompleted) ||
+                (currentFilter === 'completed' && t.isCompleted);
+
+            // Filter by importance
+            const importanceMatch = (currentImportant === 'low') ||
+                (currentImportant === t.isImportant);
+
+            return statusMatch && importanceMatch;
+
         })
+
         .filter(t => t.title.toLowerCase().includes(searchText))
         .forEach(t => {
             const li = document.createElement("li");
@@ -191,7 +202,7 @@ searchInput.addEventListener("input", fetchTasks);
 document.addEventListener('DOMContentLoaded', () => {
     // Get filter buttons after DOM is loaded
     const filterButtons = document.querySelectorAll('.btn-group .btn');
-
+    const filterImportant = document.querySelectorAll(".data-filter-importance");
     // Filter functionality
     filterButtons.forEach(button => { // got all the button
         button.addEventListener('click', (e) => {
@@ -204,5 +215,16 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTasks();
         });
     });
+    filterImportant.forEach(button => {
+        button.addEventListener('click', (e) => {
+            filterImportant.forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Update the filter state and re-render
+            currentImportant = e.target.dataset.filter;
+            renderTasks();
+        });
+    })
     fetchTasks();
+
 });
