@@ -23,27 +23,31 @@
       </select>
       <button class="btn btn-primary" id="addTaskBtn">Add Task</button>
     </div>
-    <div class="btn-group mb-3" role="group" id="filter-button">
-      <button type="button" class="btn btn-outline-primary active " data-filter="all">All</button>
-      <button type="button" class="btn btn-outline-primary" data-filter="pending">Pending</button>
-      <button type="button" class="btn btn-outline-primary" data-filter="completed">Completed</button>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-primary active" data-filter-status="all">All</button>
+        <button type="button" class="btn btn-outline-primary" data-filter-status="pending">Pending</button>
+        <button type="button" class="btn btn-outline-primary" data-filter-status="completed">Completed</button>
+      </div>
+
+      
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-secondary active" data-filter-importance="all">All</button>
+        <button type="button" class="btn btn-outline-danger" data-filter-importance="High">High</button>
+        <button type="button" class="btn btn-outline-warning text-dark" data-filter-importance="Medium">Medium</button>
+        <button type="button" class="btn btn-outline-info" data-filter-importance="Low">Low</button>
+      </div>
     </div>
 
-    <div class="btn-group mb-3" role="group" id="filter-important">
-      <button type="button" class="btn btn-outline-primary active " data-filter-importance="low">Low</button>
-      <button type="button" class="btn btn-outline-primary" data-filter-importance="medium">Medium</button>
-      <button type="button" class="btn btn-outline-primary" data-filter-importance="high">High</button>
-    </div>
 
-
-    <!-- Search -->
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search tasks...">
 
-    <!-- Task List -->
+
     <ul class="list-group" id="taskList"></ul>
   </div>
 
-  <!-- Edit Task Modal -->
+
   <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -68,7 +72,7 @@
   </div>
 
 
-  <!-- Bootstrap JS Bundle -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module" src="./js/main.js"></script>
 </body>

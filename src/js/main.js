@@ -22,7 +22,7 @@ const editTaskPriority = document.getElementById("editTaskPriority");
 const saveEditBtn = document.getElementById("saveEditBtn");
 let currentEditId = null;
 let currentFilter = 'all';
-let currentImportant = 'low';
+let currentFilterImportance = 'all';
 
 let tasks = [];
 
@@ -62,19 +62,17 @@ function renderTasks() {
 
     tasks
         .filter(t => {
-            // filter by task 
+            // Filter by completion status
             const statusMatch = (currentFilter === 'all') ||
                 (currentFilter === 'pending' && !t.isCompleted) ||
                 (currentFilter === 'completed' && t.isCompleted);
 
             // Filter by importance
-            const importanceMatch = (currentImportant === 'low') ||
-                (currentImportant === t.isImportant);
+            const importanceMatch = (currentFilterImportance === 'all') ||
+                (currentFilterImportance.toLowerCase() === t.isImportant.toLowerCase());
 
             return statusMatch && importanceMatch;
-
         })
-
         .filter(t => t.title.toLowerCase().includes(searchText))
         .forEach(t => {
             const li = document.createElement("li");
@@ -200,31 +198,29 @@ searchInput.addEventListener("input", fetchTasks);
 
 // Initial load
 document.addEventListener('DOMContentLoaded', () => {
-    // Get filter buttons after DOM is loaded
-    const filterButtons = document.querySelectorAll('.btn-group .btn');
-    const filterImportant = document.querySelectorAll(".data-filter-importance");
-    // Filter functionality
-    filterButtons.forEach(button => { // got all the button
-        button.addEventListener('click', (e) => {
-            // Update the active button class 
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
+    const filterStatusButtons = document.querySelectorAll('[data-filter-status]'); // get reference from filter by task
+    const filterImportanceButtons = document.querySelectorAll('[data-filter-importance]'); // get reference from filter by importance
 
-            // Update the filter state and re-render
-            currentFilter = e.target.dataset.filter;
+    // Filter by status
+    filterStatusButtons.forEach(button => { // al the buttons
+        button.addEventListener('click', (e) => { // when click all those button
+            filterStatusButtons.forEach(btn => btn.classList.remove('active')); // first all btn active -> pending -> completed
+            e.target.classList.add('active');
+            currentFilter = e.target.dataset.filterStatus; // update the current filter status
             renderTasks();
         });
     });
-    filterImportant.forEach(button => {
-        button.addEventListener('click', (e) => {
-            filterImportant.forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
 
-            // Update the filter state and re-render
-            currentImportant = e.target.dataset.filter;
+    // Filter by importance
+    filterImportanceButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            filterImportanceButtons.forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            currentFilterImportance = e.target.dataset.filterImportance;
             renderTasks();
         });
-    })
+    });
+
     fetchTasks();
 
 });
